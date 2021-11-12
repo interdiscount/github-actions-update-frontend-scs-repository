@@ -1,0 +1,46 @@
+name: Update frontend scs git repository
+description: Updates the image tag of the given stage in the scs frontend repository
+
+inputs:
+  repository:
+    description: The frontend scs repository to update
+    required: true
+
+  docker-image-tag:
+    description: The tag of the docker image build
+    required: true
+
+  stage:
+    description: The stage to deploy to (development, acceptance, production)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout ${{ inputs.repository }}
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ inputs.repository }}
+        token: ${{ secrets.INTERDISCOUNT_COOP_USER_PW }}
+        path: 'scs'
+        ref: 'main'
+
+    - name: Set up git config
+      shell: bash
+      working-directory: scs
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+    
+    - name: Set image.tag to ${{ inputs.docker-image-tag }}
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq eval -i '.image.tag = "${{ inputs.docker-image-tag }}"' 'scs/scs-frontend/values-${{ inputs.stage }}.yml'
+
+    - name: Update and push git
+      shell: bash
+      working-directory: scs
+      run: |
+        git add "scs/scs-frontend/values-${{ inputs.stage }}.yml"
+        git commit -m "Upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
+        git push
