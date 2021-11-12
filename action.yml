@@ -5,6 +5,10 @@ inputs:
   repository:
     description: The frontend scs repository to update
     required: true
+  
+  token:
+    description: The token to use for checkout
+    required: true
 
   docker-image-tag:
     description: The tag of the docker image build
@@ -21,7 +25,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.repository }}
-        token: ${{ secrets.INTERDISCOUNT_COOP_USER_PW }}
+        token: ${{ inputs.token }}
         path: 'scs'
         ref: 'main'
 
