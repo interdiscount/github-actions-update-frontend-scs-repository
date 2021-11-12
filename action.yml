@@ -38,9 +38,8 @@ runs:
     
     - name: Set image.tag to ${{ inputs.docker-image-tag }}
       uses: mikefarah/yq@master
-      working-directory: scs
       with:
-        cmd: yq eval -i '.image.tag = "${{ inputs.docker-image-tag }}"' 'scs-frontend/values-${{ inputs.stage }}.yaml'
+        cmd: yq eval -i '.image.tag = "${{ inputs.docker-image-tag }}"' 'scs/scs-frontend/values-${{ inputs.stage }}.yaml'
 
     - name: Update and push git
       shell: bash
