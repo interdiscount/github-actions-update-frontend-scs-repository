@@ -21,6 +21,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Install yq
+      shell: bash
+      env:
+        VERSION: v4.14.1
+        BINARY: yq_linux_amd64
+      run: |
+        mkdir -p tools
+        wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
+        tar xz && mv ${BINARY} tools/yq
+
     - name: Checkout ${{ inputs.repository }}
       uses: actions/checkout@v2
       with:
@@ -37,14 +47,15 @@ runs:
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
     
     - name: Set image.tag to ${{ inputs.docker-image-tag }}
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq eval -i '.image.tag = "${{ inputs.docker-image-tag }}"' 'scs/scs-frontend/values-${{ inputs.stage }}.yaml'
+      shell: bash
+      working-directory: scs
+      run: |
+        ../tools/yq eval -i '.image.tag = "${{ inputs.docker-image-tag }} "' 'scs-frontend/values-${{ inputs.stage }}.yaml'
 
     - name: Update and push git
       shell: bash
       working-directory: scs
       run: |
         git add "scs-frontend/values-${{ inputs.stage }}.yaml"
-        git commit -m "Upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
+        git commit -m "chore: upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
         git push
