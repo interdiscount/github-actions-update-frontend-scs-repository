@@ -2,8 +2,8 @@ name: Update scs-frontend-config git repository
 description: Updates the image tag of the given stage in the scs frontend repository
 
 inputs:
-  shop:
-    description: The shop to update
+  repository:
+    description: The repository to update
     required: true
   
   token:
@@ -34,10 +34,10 @@ runs:
     - name: Checkout ${{ inputs.repository }}
       uses: actions/checkout@v2
       with:
-        repository: interdiscount/scs-frontend-config
+        repository: ${{ inputs.repository }}
         token: ${{ inputs.token }}
         path: 'scs'
-        ref: 'main'
+        ref: 'config'
 
     - name: Set up git config
       shell: bash
@@ -51,11 +51,12 @@ runs:
       working-directory: scs
       run: |
         export IMAGE_TAG="${{ inputs.docker-image-tag }}"
-        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' '${{ inputs.shop }}/image-${{ inputs.stage }}.yaml'
+        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'image-${{ inputs.stage }}.yaml'
+
     - name: Update and push git
       shell: bash
       working-directory: scs
       run: |
-        git add "${{ inputs.shop }}/image-${{ inputs.stage }}.yaml"
+        git add "image-${{ inputs.stage }}.yaml"
         git commit -m "chore: upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
         git push
