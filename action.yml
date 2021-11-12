@@ -50,8 +50,8 @@ runs:
       shell: bash
       working-directory: scs
       run: |
-        ../tools/yq eval -i ".image.tag = ${{ inputs.docker-image-tag }}" "${{ inputs.shop }}/image-${{ inputs.stage }}.yaml"
-
+        export IMAGE_TAG="${{ inputs.docker-image-tag }}"
+        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' '${{ inputs.shop }}/image-${{ inputs.stage }}.yaml'
     - name: Update and push git
       shell: bash
       working-directory: scs
