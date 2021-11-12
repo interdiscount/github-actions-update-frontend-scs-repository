@@ -45,6 +45,6 @@ runs:
       shell: bash
       working-directory: scs
       run: |
-        git add "scs/scs-frontend/values-${{ inputs.stage }}.yaml"
+        git add "scs-frontend/values-${{ inputs.stage }}.yaml"
         git commit -m "Upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
         git push
