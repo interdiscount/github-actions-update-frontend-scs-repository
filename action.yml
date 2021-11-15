@@ -1,5 +1,5 @@
 name: Update scs-frontend-config git repository
-description: Updates the image tag of the given stage in the scs frontend repository
+description: Updates the image tag of the given stage in an scs frontend repository
 
 inputs:
   repository:
