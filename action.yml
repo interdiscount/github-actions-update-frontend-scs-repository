@@ -7,7 +7,7 @@ inputs:
     required: true
 
   ref:
-    description: The branch or tag to update
+    description: The branch to update
     required: true
   
   token:

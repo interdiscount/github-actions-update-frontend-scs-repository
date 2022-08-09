@@ -1,11 +1,15 @@
 # Update scs-frontend-config git repository
-Updates the image tag of the given stage in an scs frontend repository
+Updates the image tag of msp dev in scs-supercard-frontend-config repo
 
 ## Inputs
 
 ### `repository`
 
 **Required** The frontend scs repository to update.
+
+### `ref`
+
+**Required** The branch to update.
 
 ### `token`
 
@@ -24,7 +28,8 @@ Updates the image tag of the given stage in an scs frontend repository
 ```
 uses: interdiscount/github-actions-update-frontend-scs-repository@v1 
 with:
-    repository: interdiscount/scs-frontend-msp
+    repository: interdiscount/scs-supercard-frontend-config
+    ref: 'main'
     token: ${{ secrets.INTERDISCOUNT_COOP_USER_PW }}
     docker-image-tag: sha-${GITHUB_SHA::9}
     stage: development
