@@ -5,6 +5,10 @@ inputs:
   repository:
     description: The repository to update
     required: true
+
+  ref:
+    description: The branch or tag to update
+    required: true
   
   token:
     description: The token to use for checkout
@@ -37,7 +41,7 @@ runs:
         repository: ${{ inputs.repository }}
         token: ${{ inputs.token }}
         path: 'scs'
-        ref: 'config'
+        ref: ${{ inputs.ref }}
 
     - name: Set up git config
       shell: bash
@@ -51,7 +55,7 @@ runs:
       working-directory: scs
       run: |
         export IMAGE_TAG="${{ inputs.docker-image-tag }}"
-        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'image-${{ inputs.stage }}.yaml'
+        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'msp-dev/image-${{ inputs.stage }}.yaml'
 
     - name: Update and push git
       shell: bash
