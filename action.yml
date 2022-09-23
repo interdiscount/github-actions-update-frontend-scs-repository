@@ -22,6 +22,10 @@ inputs:
     description: The stage to deploy to (development, acceptance, production)
     required: true
 
+  shop:
+    description: The shop (id, msp)
+    required: true
+
 runs:
   using: composite
   steps:
@@ -55,12 +59,12 @@ runs:
       working-directory: scs
       run: |
         export IMAGE_TAG="${{ inputs.docker-image-tag }}"
-        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'image-${{ inputs.stage }}.yaml'
+        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'image-${{ inputs.shop }}-${{ inputs.stage }}.yaml'
 
     - name: Update and push git
       shell: bash
       working-directory: scs
       run: |
-        git add "image-${{ inputs.stage }}.yaml"
-        git commit -m "chore: upgraded image tag of ${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
+        git add "image-${{ inputs.shop }}-${{ inputs.stage }}.yaml"
+        git commit -m "chore: upgraded image tag of ${{ inputs.shop }}-${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
         git push
