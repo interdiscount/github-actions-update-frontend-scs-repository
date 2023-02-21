@@ -1,5 +1,5 @@
 # Update scs-frontend-config git repository
-Updates the image tag of msp dev in scs-supercard-frontend-config repo
+Updates the image tag of msp or telesales dev in scs-supercard-frontend-config or scs-telesales-config repo
 
 ## Inputs
 
