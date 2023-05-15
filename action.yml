@@ -1,5 +1,5 @@
-name: Update scs-frontend-config git repository
-description: Updates the image tag of the given stage in an scs frontend repository
+name: Update gitea git repository
+description: Updates the image tag in gitea.hs-gc.coop.ch repository
 
 inputs:
   repository:
@@ -27,7 +27,7 @@ jobs:
     name: Update image tag in Gitea repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ${{ inputs.repository }}
+      - name: Checkout gitea repo
         uses: actions/checkout@v2
         with:
           repository: ${{ inputs.repository }}
