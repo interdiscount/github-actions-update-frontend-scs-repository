@@ -18,12 +18,8 @@ inputs:
     description: The tag of the docker image build
     required: true
 
-  stage:
-    description: The stage to deploy to (development, acceptance, production)
-    required: true
-
-  shop:
-    description: The shop (id, msp)
+  yaml-path:
+    description: The the path of the yaml file containing the image tag
     required: true
 
 runs:
@@ -59,12 +55,12 @@ runs:
       working-directory: scs
       run: |
         export IMAGE_TAG="${{ inputs.docker-image-tag }}"
-        ../tools/yq eval -i '.image.tag = strenv(IMAGE_TAG)' 'image-${{ inputs.shop }}-${{ inputs.stage }}.yaml'
+        ../tools/yq eval -i '.spec.tags = strenv(IMAGE_TAG)' '${{ inputs.yaml-path }}'
 
     - name: Update and push git
       shell: bash
       working-directory: scs
       run: |
-        git add "image-${{ inputs.shop }}-${{ inputs.stage }}.yaml"
-        git commit -m "chore: upgraded image tag of ${{ inputs.shop }}-${{ inputs.stage }} to ${{ inputs.docker-image-tag }}"
+        git add "${{ inputs.yaml-path }}"
+        git commit -m "chore: upgraded image tag to ${{ inputs.docker-image-tag }}"
         git push
