@@ -36,11 +36,10 @@ runs:
         tar xz && mv ${BINARY} tools/yq
 
     - name: Checkout ${{ inputs.repository }}
-      uses: actions/checkout@v2
+      uses: github/codeql-action/checkout@v2
       with:
         repository: ${{ inputs.repository }}
         token: ${{ inputs.token }}
-        path: 'scs'
         ref: ${{ inputs.ref }}
 
     - name: Set up git config
@@ -48,7 +47,7 @@ runs:
       working-directory: scs
       run: |
         git config user.name "$GITHUB_ACTOR"
-        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+        git config user.email "swe@interdiscount.ch"
     
     - name: Set image.tag to ${{ inputs.docker-image-tag }}
       shell: bash
@@ -63,4 +62,4 @@ runs:
       run: |
         git add "${{ inputs.yaml-path }}"
         git commit -m "chore: upgraded image tag to ${{ inputs.docker-image-tag }}"
-        git push
+        git push https://gitea.hs-gc.coop.ch/container-sync/interdiscount-sap-pubsub-adapter.git HEAD:${{ inputs.ref }}
