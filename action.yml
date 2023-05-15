@@ -26,11 +26,10 @@ runs:
   using: composite
   steps:
     - name: Checkout gitea repo
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ inputs.repository }}
-        token: ${{ inputs.token }}
-        ref: ${{ inputs.ref }}
+      run: |
+        export GITEA_TOKEN=${{ inputs.token }}
+        git clone "${{ inputs.repository }}.git"
+        cd interdiscount-sap-pubsub-adapter
     
     - name: Install yq
       shell: bash
