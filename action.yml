@@ -32,7 +32,7 @@ runs:
     - name: Install yq
       shell: bash
       env:
-        VERSION: v4.14.1
+        VERSION: v4.34.1
         BINARY: yq_linux_amd64
       run: |
         mkdir -p tools
